@@ -77,4 +77,16 @@ public class TodoController {
             return ResponseEntity.badRequest().body(res);
         }
     }
+
+    @GetMapping
+    /**
+     * curl --location --request GET 'localhost:8080/todo'
+     */
+    public ResponseEntity<?> retrieveTodoList(){
+        String tempUserId = "temp-user-id";
+        List<TodoEntity> entries = service.retrieve(tempUserId);
+        List<TodoDTO> dtos = entries.stream().map(TodoDTO::new).collect(Collectors.toList());
+        ResponseDTO<TodoDTO> res = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+        return ResponseEntity.ok().body(res);
+    }
 }
