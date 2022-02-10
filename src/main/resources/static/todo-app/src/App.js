@@ -1,25 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import Todo from './components/Todo'
+import {useState} from "react";
+import {Paper, List} from "@material-ui/core";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App(props) {
+    const myTodoItems = [
+        {id: 0, title: "Hello world 1", done: true},
+        {id: 1, title: "Hello world 2", done: false}
+    ]
+    const [items, setItems] = useState(myTodoItems);
+    return (
+        <div className="App">
+            <Paper style={{margin:16}}>
+                <List>
+                    {items.map((item, i) => {return <Todo key={item.id} item={item}/>;})}
+                </List>
+            </Paper>
+        </div>
+    );
 }
 
 export default App;
