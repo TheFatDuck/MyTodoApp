@@ -89,4 +89,20 @@ public class TodoController {
         ResponseDTO<TodoDTO> res = ResponseDTO.<TodoDTO>builder().data(dtos).build();
         return ResponseEntity.ok().body(res);
     }
+
+    @PutMapping
+    /** id: posted todo's id
+     * curl --location --request PUT 'localhost:8080/todo' \
+     * --header 'Content-Type: application/json' \
+     * --data-raw '{ "id":"297ef5737ee202fb017ee203495b0000", "title": "A updated title.", "done":true }'
+     */
+    public ResponseEntity<?> updateTodo(@RequestBody TodoDTO dto){
+        String tempUserId ="temp-user-id";
+        TodoEntity entity = TodoDTO.toEntity(dto);
+        entity.setUserId(tempUserId);
+        List<TodoEntity> entities = service.update(entity);
+        List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+        ResponseDTO<TodoDTO> res = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+        return ResponseEntity.ok().body(res);
+    }
 }

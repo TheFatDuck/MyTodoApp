@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -56,5 +57,17 @@ public class TodoService {
 
     public List<TodoEntity> retrieve(final String userId){
         return todoRepository.findByUserId(userId);
+    }
+
+    public List<TodoEntity> update(final TodoEntity entity){
+        validate(entity);
+        final Optional<TodoEntity> original = todoRepository.findById(entity.getId());
+        //Lambda expression
+        original.ifPresent(todoEntity -> {
+            todoEntity.setTitle(entity.getTitle());
+            todoEntity.setDone(entity.isDone());
+            todoRepository.save(todoEntity);
+        });
+        return retrieve(entity.getUserId());
     }
 }
