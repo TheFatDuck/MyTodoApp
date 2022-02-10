@@ -105,4 +105,27 @@ public class TodoController {
         ResponseDTO<TodoDTO> res = ResponseDTO.<TodoDTO>builder().data(dtos).build();
         return ResponseEntity.ok().body(res);
     }
+
+    @DeleteMapping
+    /** id: posted todo's id
+     * curl --location --request DELETE 'localhost:8080/todo' \
+     * --header 'Content-Type: application/json' \
+     * --data-raw '{"id": "297ef5737ee39a0c017ee39a390d0000"}'
+     */
+    public ResponseEntity<?> deleteTodo(@RequestBody TodoDTO dto){
+        try{
+            String tempUserId = "temp-user-id";
+            TodoEntity entity = TodoDTO.toEntity(dto);
+            entity.setUserId(tempUserId);
+            List<TodoEntity> entities = service.delete(entity);
+            List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+            ResponseDTO<TodoDTO> res = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+            return ResponseEntity.ok().body(res);
+        }
+        catch(Exception ex){
+            String errMsg = ex.getMessage();
+            ResponseDTO<TodoDTO> res = ResponseDTO.<TodoDTO>builder().error(errMsg).build();
+            return ResponseEntity.badRequest().body(res);
+        }
+    }
 }

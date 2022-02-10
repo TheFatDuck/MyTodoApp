@@ -70,4 +70,16 @@ public class TodoService {
         });
         return retrieve(entity.getUserId());
     }
+
+    public List<TodoEntity>delete(final TodoEntity entity){
+        validate(entity);
+        try {
+            todoRepository.delete(entity);
+        }
+        catch(Exception ex){
+            log.error("Error occurred during delete entity ", entity.getId(), ex);
+            throw new RuntimeException("Error occurred during delete entity " + entity.getId());
+        }
+        return retrieve(entity.getUserId());
+    }
 }
